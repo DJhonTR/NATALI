@@ -6,7 +6,50 @@
     <link rel="icon" href="../imagenes/LogoTienda.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Natali</title>
+
+    <style>
+        /* Máquina de escribir */
+        .typewriter {
+            border-right: 2px solid #ec4899;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: escribir 6s steps(60) forwards;
+        }
+        @keyframes escribir {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Corazones flotando */
+        .corazon {
+            position: fixed;
+            bottom: -20px;
+            color: #ec4899;
+            font-size: 24px;
+            animation: flotar 4s linear infinite;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        @keyframes flotar {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-120vh); }
+        }
+
+        /* Marcos de fotos */
+        .marco-foto {
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+        .marco-foto:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 18px rgba(236, 72, 153, 0.6);
+        }
+    </style>
 </head>
+
 <body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white min-h-screen">
     <header class="sticky top-0 z-50 shadow-lg shadow-pink-500/20">
         <nav class="bg-gradient-to-r from-pink-500 via-pink-600 to-pink-500 backdrop-blur-sm">
@@ -25,8 +68,65 @@
             </div>
         </nav>
     </header>
-    <main class="flex justify-center items-center">
-        <audio src="../Musica/Madonna-letra.mp3" controls class="m-10"></audio>
+
+    <main class="px-4 py-10 flex flex-col items-center gap-10">
+
+        <!-- TU CONTENIDO ORIGINAL -->
+        <div class="max-w-3xl bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-lg shadow-pink-500/20 relative z-20">
+
+            <h1 class="text-center text-3xl sm:text-4xl font-bold text-pink-400 mb-6">
+                Para mi amor 💖
+            </h1>
+
+
+            <p class="typewriter text-lg sm:text-xl text-pink-200 mb-6">
+                Mi amor, tan solo queria decirte esto ❤️.
+            </p>
+
+           
+            <button onclick="mostrarMensaje()"
+                class="bg-pink-600 hover:bg-pink-700 transition-all px-5 py-3 rounded-xl font-semibold shadow-md shadow-pink-500/30">
+                Haz clic aquí
+            </button>
+
+            <div id="mensaje" class="hidden mt-4 bg-pink-600/20 p-4 rounded-xl text-pink-200 border border-pink-600/30">
+                Eres la persona que más amo en esta vida, la razón por la que sonrío sin darme cuenta.
+                Gracias por existir. Te amo con todo mi corazón. ❤️
+            </div>
+
+        </div>
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl w-full">
+
+            <div class="marco-foto">
+                <img src="../nosotros/N1.jpg" class="w-full h-56 object-cover" alt="">
+            </div>
+
+            <div class="marco-foto">
+                <img src="../nosotros/N2.jpg" class="w-full h-56 object-cover" alt="">
+            </div>
+
+        </section>
+
     </main>
+
+    <script>
+        function mostrarMensaje() {
+            document.getElementById("mensaje").classList.remove("hidden");
+        }
+
+        // Corazones flotantes
+        setInterval(() => {
+            let corazon = document.createElement("div");
+            corazon.classList.add("corazon");
+            corazon.innerText = "💖";
+            corazon.style.left = Math.random() * 100 + "vw";
+            corazon.style.animationDuration = (3 + Math.random() * 3) + "s";
+            document.body.appendChild(corazon);
+            setTimeout(() => corazon.remove(), 6000);
+        }, 600);
+    </script>
+
 </body>
 </html>
+
