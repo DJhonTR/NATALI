@@ -4,69 +4,313 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../imagenes/LogoTienda.png" type="image/png">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Natali</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                        script: ['"Dancing Script"', 'cursive']
+                    },
+                    colors: {
+                        brand: {
+                            pink: '#ec4899',
+                            rose: '#f472b6',
+                            dark: '#be185d',
+                            cream: '#fce7f3'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'heartbeat': 'heartbeat 1.5s ease-in-out infinite',
+                        'fade-in': 'fadeIn 1.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        heartbeat: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '25%': { transform: 'scale(1.1)' },
+                            '50%': { transform: 'scale(1)' },
+                            '75%': { transform: 'scale(1.1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <title>Para el amor de mi vida - Fotos</title>
+
+    <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        body { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; }
+        
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.1);
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .floating-heart {
+            position: absolute;
+            color: #ec4899;
+            opacity: 0;
+            animation: floatUp linear forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 0.5; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(45deg); opacity: 0; }
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white min-h-screen">
-    <header class="sticky top-0 z-50 shadow-lg shadow-pink-500/20">
-        <nav class="bg-gradient-to-r from-pink-500 via-pink-600 to-pink-500 backdrop-blur-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <a href="../index.html" class="transform transition-all duration-300 hover:scale-110 hover:rotate-12 group">
-                        <img src="../imagenes/NATALI_LOGO.png" alt="" width="85" height="45">
-                    </a>
-                    <ul class="flex gap-2 sm:gap-6 font-semibold">
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="musica.html">Musica</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="fotos.html">Fotos</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="nosotros.html">Nosotros</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="video.html">Video</a></li>
+
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-200 min-h-screen relative overflow-x-hidden selection:bg-brand-pink selection:text-white">
+
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <header class="sticky top-0 z-50 transition-all duration-300 bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-brand-pink/30 shadow-brand-pink/10">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-3 sm:py-0 sm:h-20 gap-3 sm:gap-0">
+                <a href="../index.html" class="flex items-center group">
+                    <img src="../imagenes/NATALI_LOGO.png" alt="Logo" class="h-10 sm:h-12 w-auto transform transition-transform duration-500 group-hover:scale-105">
+                </a>
+                <nav class="w-full sm:w-auto overflow-x-auto no-scrollbar">
+                    <ul class="flex justify-center gap-4 sm:gap-8 font-playfair font-semibold text-gray-300 text-[14px] sm:text-lg tracking-wide px-2 py-1">
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="musica.html">Música</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-brand-rose" href="fotos.html">Fotos</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="nosotros.html">Nosotros</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="video.html">Videos</a></li>
                     </ul>
-                </div>
+                </nav>
             </div>
-        </nav>
+        </div>
     </header>
-    
-    <main class="container mx-auto px-4 py-8">
-        <div class="flex justify-center items-center gap-3 mb-6">
-            <h1 class="mt-3 font-black text-3xl md:text-5xl bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 bg-clip-text text-transparent">Fotos</h1>
-            <svg class="text-pink-500 animate-pulse" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 14 14">
+
+    <main class="relative z-10 container mx-auto px-4 py-12">
+        <div class="flex justify-center items-center gap-4 mb-8 opacity-0 animate-fade-in">
+            <h1 class="font-playfair font-black text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark drop-shadow-[0_0_15px_rgba(236,72,153,0.3)]">Fotos</h1>
+            <svg class="text-brand-pink animate-heartbeat" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 14 14">
                 <path fill="currentColor" fill-rule="evenodd" d="M5.351 1.07C5.768.653 6.348.469 7 .469s1.232.184 1.649.601c.416.417.601.997.601 1.649s-.185 1.231-.6 1.648c-.417.417-.997.602-1.649.602s-1.232-.185-1.649-.602c-.416-.416-.601-.996-.601-1.648s.185-1.232.601-1.649m1.65 5.988c-.507-.48-1.153-.983-1.846-1.246c-.39-.148-.806-.224-1.224-.169c-.421.056-.829.244-1.201.598c-.628.596-.786 1.345-.647 2.108c.137.752.562 1.522 1.104 2.216a9.7 9.7 0 0 0 1.888 1.82c.661.48 1.338.83 1.885.92a.3.3 0 0 0 .08 0c.547-.09 1.225-.44 1.885-.92a9.7 9.7 0 0 0 1.889-1.82c.542-.694.966-1.464 1.103-2.216c.14-.763-.018-1.512-.646-2.108c-.373-.354-.78-.542-1.202-.598c-.417-.055-.833.02-1.224.17c-.692.262-1.339.765-1.845 1.245" clip-rule="evenodd"/>
             </svg>
         </div>
         
-        <div class="bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-xl shadow-pink-500/10 border border-pink-500/20 p-6 max-w-4xl mx-auto mb-10">
-            <p class="text-gray-200 text-center text-lg md:text-xl">"Fotitos de mi amorcito"</p>
+        <div class="glass-panel rounded-2xl p-6 text-center max-w-4xl mx-auto mb-16 opacity-0 animate-fade-in" style="animation-delay: 0.2s;">
+            <p class="text-gray-300 font-light text-xl md:text-2xl font-playfair italic">"Fotitos de mi amorcito <span class="text-brand-pink">&lt;3</span>"</p>
         </div>
         
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-4 max-w-7xl mx-auto">
-            <div class="overflow-hidden rounded-2xl col-span-2 md:col-span-2 shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali1.jpg" alt="" class="h-[350px] w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+        <div class="columns-2 md:columns-3 lg:columns-4 gap-4 max-w-7xl mx-auto opacity-0 animate-fade-in" style="animation-delay: 0.4s;">
+            <!-- Renderizando 19 imágenes con diseño Masonry -->
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali1.jpg" alt="" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali2.jpg" alt="" class="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali2.jpg" alt="" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali3.jpg" alt="" class="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali3.jpg" alt="" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali4.jpg" alt="" class="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali4.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali5.jpg" alt="" class="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali5.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl col-span-2 md:col-span-3 shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali6.jpg" alt="" class="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali6.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali7.jpg" alt="" class="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali7.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl col-span-1 md:col-span-2 shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali8.jpg" alt="" class="h-[350px] w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali8.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
-            <div class="overflow-hidden rounded-2xl col-span-1 md:col-span-2 shadow-lg shadow-pink-500/10 border border-pink-500/10 group">
-                <img src="../imagenes/Natali9.jpg" alt="" class="h-[350px] w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110">
+            
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali9.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali10.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali11.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali12.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali13.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali14.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali15.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali16.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali17.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali18.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            </div>
+
+            <div class="break-inside-avoid mb-4 overflow-hidden rounded-2xl shadow-lg shadow-brand-pink/10 border border-brand-pink/20 hover:border-brand-pink/60 group relative cursor-crosshair">
+                <div class="absolute inset-0 bg-brand-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 mix-blend-overlay"></div>
+                <img src="../imagenes/Natali19.jpg" alt="" loading="lazy" class="w-full h-auto object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
             </div>
         </div>
+        
     </main>
+
+    <footer class="text-center py-10 mt-10 border-t border-brand-pink/30 bg-gray-900/60 backdrop-blur-md relative z-10 shadow-[0_-4px_15px_rgba(0,0,0,0.5)]">
+        <p class="font-playfair font-medium text-brand-pink text-lg mb-1">Hecho con todo el amor del mundo para ti</p>
+        <p class="text-gray-400 font-light text-sm tracking-widest uppercase">Mi vida entera.</p>
+    </footer>
+
+    <script>
+        const container = document.getElementById('hearts-container');
+        const heartSymbols = ['💖', '💕', '💗', '💓', '🌸', '✨'];
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 5 + 6 + 's';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 12000); 
+        }
+
+        setInterval(createHeart, 600);
+        for(let i = 0; i < 8; i++) {
+            setTimeout(createHeart, i * 150);
+        }
+
+        // --- Efecto Flip 3D Romántico para Fotos ---
+        const photos = document.querySelectorAll('.break-inside-avoid');
+        const romanticPhrases = [
+            "Eres bella", 
+            "Eres Hermosa", 
+            "Me gustas", 
+            "Me encantas", 
+            "Eres el amor de mi vida", 
+            "Te amo Mucho", 
+            "I Love You",
+            "Mi niña hermosa",
+            "Preciosa mi amor",
+            "Mi vida entera",
+            "Contigo todo es mejor",
+
+            
+        ];
+
+        photos.forEach(photoEl => {
+            // Guardar el contenido original de la imagen
+            const imgHTML = photoEl.innerHTML;
+            photoEl.innerHTML = ''; 
+            
+            // Ajustar el contenedor padre para el 3D
+            photoEl.className = 'break-inside-avoid mb-6 w-full cursor-pointer hover:scale-[1.02] transition-transform duration-300';
+            photoEl.style.perspective = '1500px'; // Da el efecto de profundidad
+
+            // Contenedor que rota
+            const flipInner = document.createElement('div');
+            flipInner.className = 'relative w-full h-full transition-transform duration-[800ms] rounded-2xl';
+            flipInner.style.transformStyle = 'preserve-3d';
+            
+            // Cara Frontal (La foto actual)
+            const front = document.createElement('div');
+            front.className = 'w-full h-full rounded-2xl relative shadow-lg shadow-brand-pink/10 border border-brand-pink/20 overflow-hidden group bg-gray-800';
+            front.style.backfaceVisibility = 'hidden';
+            front.style.webkitBackfaceVisibility = 'hidden';
+            front.innerHTML = imgHTML;
+
+            // Cara Trasera (El mensaje)
+            const back = document.createElement('div');
+            back.className = 'absolute inset-0 w-full h-full rounded-2xl flex items-center justify-center p-6 text-center shadow-[0_0_30px_rgba(236,72,153,0.5)] bg-gradient-to-br from-gray-900 via-gray-800 to-black border-2 border-brand-pink/80 overflow-hidden';
+            back.style.transform = 'rotateY(180deg)';
+            back.style.backfaceVisibility = 'hidden';
+            back.style.webkitBackfaceVisibility = 'hidden';
+            
+            // Contenido trasero
+            const frase = romanticPhrases[Math.floor(Math.random() * romanticPhrases.length)];
+            back.innerHTML = `
+                <div class="absolute inset-0 bg-brand-pink/10 backdrop-blur-sm"></div>
+                <h3 class="font-script text-3xl md:text-5xl text-brand-rose leading-tight drop-shadow-[0_2px_15px_rgba(236,72,153,0.8)] z-10 select-none">
+                    ${frase}
+                </h3>
+                <span class="absolute bottom-4 right-4 text-2xl animate-heartbeat z-10 select-none">💕</span>
+            `;
+
+            flipInner.appendChild(front);
+            flipInner.appendChild(back);
+            photoEl.appendChild(flipInner);
+
+            // Al hacer click, voltear la carta
+            photoEl.addEventListener('click', () => {
+                const isFlipped = flipInner.style.transform === 'rotateY(180deg)';
+                flipInner.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
+            });
+        });
+    </script>
 </body>
 </html>

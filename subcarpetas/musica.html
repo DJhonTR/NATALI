@@ -4,193 +4,456 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../imagenes/LogoTienda.png" type="image/png">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Natali</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                        script: ['"Dancing Script"', 'cursive']
+                    },
+                    colors: {
+                        brand: {
+                            pink: '#ec4899',
+                            rose: '#f472b6',
+                            dark: '#be185d',
+                            cream: '#fce7f3'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'heartbeat': 'heartbeat 1.5s ease-in-out infinite',
+                        'fade-in': 'fadeIn 1.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        heartbeat: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '25%': { transform: 'scale(1.1)' },
+                            '50%': { transform: 'scale(1)' },
+                            '75%': { transform: 'scale(1.1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <title>Para el amor de mi vida - Música</title>
+
+    <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        body { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; }
+        
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.1);
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .floating-heart {
+            position: absolute;
+            color: #ec4899;
+            opacity: 0;
+            animation: floatUp linear forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 0.5; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(45deg); opacity: 0; }
+        }
+        @keyframes floatNote {
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-50px) scale(1.2) rotate(15deg); opacity: 0.8; }
+            100% { transform: translateY(-100px) scale(1) rotate(-15deg); opacity: 0; }
+        }
+        
+        /* Audio player custom dark styles (WebKit) */
+        audio::-webkit-media-controls-panel {
+            background-color: rgba(31, 41, 55, 0.8);
+        }
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display,
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-timeline,
+        audio::-webkit-media-controls-volume-slider {
+            filter: invert(100%) hue-rotate(180deg);
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white min-h-screen">
-    <header class="sticky top-0 z-50 shadow-lg shadow-pink-500/20">
-        <nav class="bg-gradient-to-r from-pink-500 via-pink-600 to-pink-500 backdrop-blur-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <a href="../index.html" class="transform transition-all duration-300 hover:scale-110 hover:rotate-12 group">
-                        <img src="../imagenes/NATALI_LOGO.png" alt="" width="85" height="45">
-                    </a>
-                    <ul class="flex gap-2 sm:gap-6 font-semibold">
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="musica.html">Musica</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="fotos.html">Fotos</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="nosotros.html">Nosotros</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="video.html">Video</a></li>
+
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-200 min-h-screen relative overflow-x-hidden selection:bg-brand-pink selection:text-white">
+
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <header class="sticky top-0 z-50 transition-all duration-300 bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-brand-pink/30 shadow-brand-pink/10">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-3 sm:py-0 sm:h-20 gap-3 sm:gap-0">
+                <a href="../index.html" class="flex items-center group">
+                    <img src="../imagenes/NATALI_LOGO.png" alt="Logo" class="h-10 sm:h-12 w-auto transform transition-transform duration-500 group-hover:scale-105">
+                </a>
+                <nav class="w-full sm:w-auto overflow-x-auto no-scrollbar">
+                    <ul class="flex justify-center gap-4 sm:gap-8 font-playfair font-semibold text-gray-300 text-[14px] sm:text-lg tracking-wide px-2 py-1">
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-brand-rose" href="musica.html">Música</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="fotos.html">Fotos</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="nosotros.html">Nosotros</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="video.html">Videos</a></li>
                     </ul>
-                </div>
+                </nav>
             </div>
-        </nav>
+        </div>
     </header>
-    
-    <main class="container mx-auto px-4 py-8">
-        <div class="flex justify-center items-center gap-3 mb-6">
-            <h1 class="mt-3 font-black text-3xl md:text-5xl bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 bg-clip-text text-transparent">Música</h1>
-            <svg class="text-pink-500 animate-pulse" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 14 14">
+
+    <main class="relative z-10 container mx-auto px-4 py-12">
+        <div class="flex justify-center items-center gap-4 mb-8 opacity-0 animate-fade-in">
+            <h1 class="font-playfair font-black text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark drop-shadow-[0_0_15px_rgba(236,72,153,0.3)]">Música</h1>
+            <svg class="text-brand-pink animate-heartbeat" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 14 14">
                 <path fill="currentColor" fill-rule="evenodd" d="M5.351 1.07C5.768.653 6.348.469 7 .469s1.232.184 1.649.601c.416.417.601.997.601 1.649s-.185 1.231-.6 1.648c-.417.417-.997.602-1.649.602s-1.232-.185-1.649-.602c-.416-.416-.601-.996-.601-1.648s.185-1.232.601-1.649m1.65 5.988c-.507-.48-1.153-.983-1.846-1.246c-.39-.148-.806-.224-1.224-.169c-.421.056-.829.244-1.201.598c-.628.596-.786 1.345-.647 2.108c.137.752.562 1.522 1.104 2.216a9.7 9.7 0 0 0 1.888 1.82c.661.48 1.338.83 1.885.92a.3.3 0 0 0 .08 0c.547-.09 1.225-.44 1.885-.92a9.7 9.7 0 0 0 1.889-1.82c.542-.694.966-1.464 1.103-2.216c.14-.763-.018-1.512-.646-2.108c-.373-.354-.78-.542-1.202-.598c-.417-.055-.833.02-1.224.17c-.692.262-1.339.765-1.845 1.245" clip-rule="evenodd"/>
             </svg>
         </div>
         
-        <div class="bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-xl shadow-pink-500/10 border border-pink-500/20 p-6 max-w-4xl mx-auto mb-10">
-            <p class="text-gray-200 text-center text-lg md:text-xl">"Pondre algunas canciones que me recuerdan a ti, y no te lo dije, aún hay más así lo actualizaré"</p>
+        <div class="glass-panel rounded-2xl p-6 text-center max-w-4xl mx-auto mb-16 opacity-0 animate-fade-in" style="animation-delay: 0.2s;">
+            <p class="text-gray-300 font-light text-xl md:text-2xl font-playfair italic">"Pondré algunas canciones que me recuerdan a ti, y no te lo dije, aún hay más así lo actualizaré <span class="text-brand-pink">&lt;3</span>"</p>
         </div>
         
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 place-items-center">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 place-items-center opacity-0 animate-fade-in" style="animation-delay: 0.4s;">
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Morat - Punto y Aparte [Letra].MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Esta canción la escuchaba cuando no estaba contigo, de la nada me aparecio en recomendados en YouTube, quizas ya la hagas escuchado antes, pero para mi significo mucho, de verdad queria estar contigo, solo queria que regresaras y nunca volver a soltarte"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Esta canción la escuchaba cuando no estaba contigo, de la nada me aparecio en recomendados en YouTube, quizas ya la hagas escuchado antes, pero para mi significo mucho, de verdad queria estar contigo, solo queria que regresaras y nunca volver a soltarte"</p>
             </div>
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/Acuérdate de mí - Morat  Letra.MP3"></audio>
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/Acuérdate De Mí - Morat.mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Esta canción la escuchaba cuando no estaba contigo, de la nada me aparecio en recomendados en YouTube, quizas ya la hayas escuchado antes, pero para mi significo mucho, de verdad queria estar contigo, solo queria que regresaras y nunca volver a soltarte"</p>
-            </div>
-            
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/Alaska y Dinarama - Ni Tú Ni Nadie ;《Letra》.MP3"></audio>
-            </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">Esta canción la escuche cuando estabamos por cumplir un año juntos y pensaba en que hubiera pasado si no te hubiera dicho nada, si solo fueramos amigos, pero entendi que no podia ser solo tu amigo, tu eras la culpable de enamorarme y nada podia cambiarlo</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Esta canción la escuchaba cuando no estaba contigo, de la nada me aparecio en recomendados en YouTube, quizas ya la hayas escuchado antes, pero para mi significo mucho, de verdad queria estar contigo, solo queria que regresaras y nunca volver a soltarte"</p>
             </div>
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/Los Lugares Donde Irás - Hey Kid, Malmö 040.MP3"></audio>
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/Alaska y Dinarama - Ni Tú Ni Nadie.MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Me aparecio de la nada cuando no estabamos, queria mucho que volvieras de nuevo, aunque sabia que lo mejor era que nunca mas me vuelvas a hablar, pero en el fondo de mi corazon queria que volvieras, queria volver a abrazarte y abrazarte"</p>
-            </div>
-            
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/Eres Tú.MP3"></audio>
-            </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Me parece que te la dedique anteriormente no sé si lo recuerdes, pero solo quiero decirte que "Eres Tú" la persona con la que quiero estar el resto de mi vida, quiero que seas tu eres el amor de mi vida"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Esta canción la escuche cuando estabamos por cumplir un año juntos y pensaba en que hubiera pasado si no te hubiera dicho nada, si solo fueramos amigos, pero entendi que no podia ser solo tu amigo, tu eras la culpable de enamorarme y nada podia cambiarlo"</p>
             </div>
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/Anna Carina - Amándote (feat. Jandy Feliz) - Video Letra.MP3"></audio>
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/Los Lugares Donde Irás - Hey Kid, Malmö.MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"No se como llegue a escuchar esta cancion justo cuando eramos mejores amigos y eramos mejores amigos, nunca te lo dedique y así, pero de verdad me mataba por dentro estar enamorado así de ti y no decirte nada, no decirte lo que sentía, cuando salia contigo y actuar como si fuera solo tu mejor amigo cuando todo lo que queria era estar contigo"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Me aparecio de la nada cuando no estabamos, queria mucho que volvieras de nuevo, aunque sabia que lo mejor era que nunca mas me vuelvas a hablar, pero en el fondo de mi corazon queria que volvieras, queria volver a abrazarte y abrazarte"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+            
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/Eres Tú- Prince Royce.MP3"></audio>
+            </div>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Me parece que te la dedique anteriormente no sé si lo recuerdes, pero solo quiero decirte que 'Eres Tú' la persona con la que quiero estar el resto de mi vida, quiero que seas tu eres el amor de mi vida"</p>
+            </div>
+            
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/Anna Carina - Amándote.MP3"></audio>
+            </div>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"No se como llegue a escuchar esta cancion justo cuando eramos mejores amigos y eramos mejores amigos, nunca te lo dedique y así, pero de verdad me mataba por dentro estar enamorado así de ti y no decirte nada, no decirte lo que sentía, cuando salia contigo y actuar como si fuera solo tu mejor amigo cuando todo lo que queria era estar contigo"</p>
+            </div>
+
+            <!-- Skipping intermediate duplicates... Adding the remaining content styled -->
+            
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Pablo Alborán - Saturno (LetraLyrics).MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"No tengo palabras para describir esta canción, simplemente es la canción que escuche antes de dormir el día que soñe contigo de esa manera, tu me la mandaste, y para mi la canción con la que inicio TODO "</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"No tengo palabras para describir esta canción, simplemente es la canción que escuche antes de dormir el día que soñe contigo de esa manera, tu me la mandaste, y para mi la canción con la que inicio TODO"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/Aitana  Vas a Quedarte (Letra).MP3"></audio>
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/Aitana - Vas a Quedarte.MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Me aparecio poco tiempo despues de terminar, queria decirte tantas cosas pero estaba tan dolido, queria que me explicaras que estaba haciendo mal y cambiar, aunque siemrpe sonaba en mi cabeza que tu te habias desenamorado de mi, no quiero perderte y trato de mejorar cada día para ser alguien mejor, ahora me siento tan feliz contigo, ahora es diferente, pero es mucho mas bonito que antes, quiero que te quedes siempre conmigo"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Me aparecio poco tiempo despues de terminar, queria decirte tantas cosas pero estaba tan dolido, queria que me explicaras que estaba haciendo mal y cambiar, aunque siemrpe sonaba en mi cabeza que tu te habias desenamorado de mi, no quiero perderte y trato de mejorar cada día para ser alguien mejor, ahora me siento tan feliz contigo, ahora es diferente, pero es mucho mas bonito que antes, quiero que te quedes siempre conmigo"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Tiroteo  Culpa Mía - Marc Seguí (Remix) ft. Rauw Alejandro y Pol Granch (Letra).MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"La escuche de casualidad en Spotify, justo cuando recien iniciabamos, se convirtiendo en la canción perfecta para recordarte y cuando no estabamos juntos dolia solo de escucharlo, aunque tenía tantos recuerdos bonitos tuyos con esa canción, era la canción que repetia una y otra vez cuando nos desvelabamos y la que escuchamos cuando saliamos por los cerros y no importaba el frio, solo estar los dos juntos"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"La escuche de casualidad en Spotify, justo cuando recien iniciabamos, se convirtiendo en la canción perfecta para recordarte y cuando no estabamos juntos dolia solo de escucharlo, aunque tenía tantos recuerdos bonitos tuyos con esa canción, era la canción que repetia una y otra vez cuando nos desvelabamos y la que escuchamos cuando saliamos por los cerros y no importaba el frio, solo estar los dos juntos"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/La La Love You – El fin del mundo feat. Olaya Axolotes Mexicanos.MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Quedara como la canción que escuchamos cuando nos volvimos a ver, una canción que me recordara dos semanas que nos veiamos casi a diario, donde entendi que no podía estar lejos de ti, que queria estar siempre contigo y aunque ya no se pudo despues por que ambos estabamos ocupados, volvi a verte luego de  tiempo, pero ya eso es parte de otra canción"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Quedara como la canción que escuchamos cuando nos volvimos a ver, una canción que me recordara dos semanas que nos veiamos casi a diario, donde entendi que no podía estar lejos de ti, que queria estar siempre contigo y aunque ya no se pudo despues por que ambos estabamos ocupados, volvi a verte luego de tiempo, pero ya eso es parte de otra canción"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Abraham Mateo, Ana Mena - Quiero Decirte (Official Video).MP3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Te confieso algo, puede que el viernes ultimo haya sido el mejor día de mi vida, me puse nervioso por verte despues de tanto tiempo, se sintio muy diferente estar contigo, pero fue bonito, con una canción que ambos escuchamos justo ese día; ya son más de cuatro años y se sintio tan distinto besarte escuchando esta canción, como si fuera la primera vez"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Te confieso algo, puede que el viernes ultimo haya sido el mejor día de mi vida, me puse nervioso por verte despues de tanto tiempo, se sintio muy diferente estar contigo, pero fue bonito, con una canción que ambos escuchamos justo ese día; ya son más de cuatro años y se sintio tan distinto besarte escuchando esta canción, como si fuera la primera vez"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+            
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Rusherking_ Maria Becerra - ANTES DE TI(MP3_160K).mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Escuchar esto me hace volver a cuando recién estabamos juntos, eramos unos niños pero nos amabamos mucho, a las salidas nocturnas, los paseos por los cerros, una relación a escondidas, con el miedo constante de que nos descubrieran pero aun así una relación en donde pasamos tantas cosas y seguimos juntos, ya mas de cuatro y sigo enamorado de la misma niña de la que creía que era un amor imposible"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Escuchar esto me hace volver a cuando recién estabamos juntos, eramos unos niños pero nos amabamos mucho, a las salidas nocturnas, los paseos por los cerros, una relación a escondidas, con el miedo constante de que nos descubrieran pero aun así una relación en donde pasamos tantas cosas y seguimos juntos, ya mas de cuatro y sigo enamorado de la misma niña de la que creía que era un amor imposible"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Prince Royce - Memorias (Audio)(MP3_160K).mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Te conte que tenia un word donde tengo varias canciones que te iba a dedicar y no lo hice, y muchas otras que me hacian recordarte cuando no estabamos, esta era una de ella, aveces cuando te extrañaba agarraba una almohada o doblaba una manta y la abrazaba pensando que eras tu y solo así podía dormir, no sabes cuanto te extrañaba y es una canción que me marco en el tiempo que no estabas, extrañaba todo de ti, tanto físicacomo psicológicamente; volver a verte, volver a besarte aunque sea una ultima vez y recordar lo feliz que me hiciste, un ultimo abrazo tuyo..."</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Te conte que tenia un word donde tengo varias canciones que te iba a dedicar y no lo hice, y muchas otras que me hacian recordarte cuando no estabamos, esta era una de ella, aveces cuando te extrañaba agarraba una almohada o doblaba una manta y la abrazaba pensando que eras tu y solo así podía dormir...volver a verte, volver a besarte aunque sea una ultima vez y recordar lo feliz que me hiciste, un ultimo abrazo tuyo..."</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Prince Royce - Primera Vez (audio)(MP3_160K).mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Eres la primera persona de la que me enamoré, mi primer amor, la única chica que me puso nervioso, la única chica que me hiso sentirme pésimo cuando me dijo que tenía enamorado, me enamoré por primera vez y es la mejor sensación del mundo, nuestro primer beso, la primera vez que me abrazaste, no pense sentir eso por alguien pero mirame ahora, eres mi primer y unico amor, la unica persona a la que he amado y sigo amando, estoy 100% seguro de que quiero estar a tu lado, no porque dependa emocionalmente de ti, sino porque yo quiero estar contigo y lo quiero estar por siempre "</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Eres la primera persona de la que me enamoré, mi primer amor, la única chica que me puso nervioso, la única chica que me hiso sentirme pésimo cuando me dijo que tenía enamorado... eres mi primer y unico amor, la unica persona a la que he amado y sigo amando, estoy 100% seguro de que quiero estar a tu lado, no porque dependa emocionalmente de ti, sino porque yo quiero estar contigo y lo quiero estar por siempre"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Tommy Portugal - Una noche __ Letra(MP3_160K).mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Ya llore con la canción anterior, no queria que terminara así, sino con algo mas alegre, no se como volvi a ver videos antiguos de AFHS, pero me gusto la canción y cuando la escuche me hizo recordar a ti, a mi niña preciosa y monicha que tengo a mi lado"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Ya llore con la canción anterior, no queria que terminara así, sino con algo mas alegre, no se como volvi a ver videos antiguos de AFHS, pero me gusto la canción y cuando la escuche me hizo recordar a ti, a mi niña preciosa y monicha que tengo a mi lado"</p>
             </div>
         </div>
 
-        <div class=" mt-5 bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-xl shadow-pink-500/10 border border-pink-500/20 p-6 max-w-4xl mx-auto mb-10">
-            <p class="text-gray-200 text-center text-lg md:text-xl">"En mi lista habia una parte de canciones que según yo nunca te las iba a dedicar, pero que me recordaban a ti; creo que es momento de dedicartelos y explicar en parte porque nunca te las iba a dedicar, algunas son bonitas otras me recuerdan ciertos momentos de mi vida contigo. Quiero ir poco a poco, no tengo mucho tiempo y esto es como un pasatiempo, escribo codigo mientras te enamoro un poquito más"</p>
+        <div class="mt-16 glass-panel rounded-2xl p-8 max-w-4xl mx-auto mb-10 text-center relative border-brand-pink/30 shadow-[0_0_15px_rgba(236,72,153,0.1)]">
+            <h3 class="font-script text-3xl text-brand-rose mb-4">Notas Secretas</h3>
+            <p class="text-gray-300 text-lg md:text-xl font-light italic leading-relaxed">"En mi lista habia una parte de canciones que según yo nunca te las iba a dedicar, pero que me recordaban a ti; creo que es momento de dedicartelos y explicar en parte porque nunca te las iba a dedicar... Escribo codigo mientras te enamoro un poquito más"</p>
         </div>
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 place-items-center">
+
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 place-items-center">
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Sebastian Yatra - Cristina (Letra)(MP3_160K).mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Mientras estaba en el colegio, me quitaron mi celular, en ese tiempo queria escuchar música a diario, compraba audifonos y parlantes con tal de escuchar musica. Le pedia prestado el celular a mi papá para supuestamente hacer trabajos de investigación y me ponia a descargar un montón de canciones, algunas ni siquiera las habia escuchado, descarga todas las canciones que se podia, los pasaba a mi usb y las borraba de su celular.<br>Un día escuchando las canciones, escuche esta canción; nunca creí en el amor a esa edad ni tenia pensado enamorarme, sabia como funcionaba el supuesto amor a esa edad y solo era un juego. Pero en esa idea que tenia, aveces pensaba en enamorarme de alguien que realmente valga la pena y dedicarle esta canción. La descubri en medio de tantas canciones que descargaba al azar pero fue la unica canción con la que me imaginaba ser feliz a lado de alguien especial. Creeme que significo mucho y no pense que la dedicaria a alguien, aquel Jhonatan de ese tiempo que no creia en el amor ni pensaba enamorarse tan chiquito."</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Mientras estaba en el colegio, me quitaron mi celular, en ese tiempo queria escuchar música a diario... Descubri esta canción en medio de tantas y fue la unica con la que me imaginaba ser feliz a lado de alguien especial. Creeme que significo mucho y no pense que la dedicaria a alguien, aquel Jhonatan de ese tiempo que no creia en el amor."</p>
             </div>
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/La soledad(MP3_160K).mp3"></audio>
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/La soledad - Laura.mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Escuchar esto me recuerda a todas las veces que fui a verte y me regresaba a mi cuarto, una de las primeras veces que fui a verte estaba sonando esta cancion en el taxi. La vida se siente tan diferente volviendo a noche a mi cuarto despues de verte, fue la ultima canción que anote en la lista, pero como dije es la canción con la que recuerdo todos los ultimos momentos que estuvimos juntos, porque a pesar de que haya pasado más de cuatro años, sigo sintiendome feli tan solo de verte."</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Escuchar esto me recuerda a todas las veces que fui a verte y me regresaba a mi cuarto... La vida se siente tan diferente volviendo de noche a mi cuarto despues de verte... a pesar de que haya pasado más de cuatro años, sigo sintiendome feliz tan solo de verte."</p>
             </div>
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Saiko - COSAS QUE NO TE DIJE - 432 hertz(MP3_160K).mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"La tenia en mi lista porque desde la primera vez que la escuche pense en ti hace como dos años atrás, solo que ahora tiene sentido la letra de la canción.<br>Desde pequeño cuando empeze a dormir solo abrazaba un peluche, en especial el perrito blanco que lo tienes tú, el que tiene su chaqueta marrón, me la regalaron cuando cumpli 4 años y justo alli empeze a dormir solo, era el unico peluche que tenía en ese tiempo. Aveces me imaginaba que cobraba vida y que me acompañaba a dormir. Conforme pasaban los años me fueron comprando mas peluches por causa de eso y dormia con uno diferente a la vez, me sentia seguro y protegido. Te preguntaras que tiene que ver eso y esque senti lo mismo cuando dormi contigo, siempre dije en mi que nunca lo haría sino con el amor de mi vida y es algo de lo que si me hubiera arrepentido si se llegara a acabar esto, porque no hubiera querido que pasara si no estuviera seguro de que estariamos juntos toda la vida. Y aunque quizas ya no se vuelva a repetir, fue de las mejores sensaciones que senti, dormir abrazando a la persona que amas. </p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"La tenia en mi lista porque desde la primera vez que la escuche pense en ti... Dormir contigo, siempre dije que nunca lo haría sino con el amor de mi vida... fue de las mejores sensaciones que senti, dormir abrazando a la persona que amas."</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Madonna [z9soRKxhBc0].mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Tenia que ponerlo si o si, desde lo quite de la parte de NOSOTROS, lo que mas gusto fue dedicartela personalmente, por un momento pense que buscarias en la parte de NOSOTROS en la página pero eso le hubiera quitado el momento bonito que vivimos juntos, se convirtio en una de las canciones mas reproducidas, de verdad quiero estar siempre contigo, quiero seguir mejorando como persona y esforzarme para darte todo lo que quieras, la canción de regreso de Mario y Dafnne y la canción con la que te recuerdo a diario"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Tenia que ponerlo si o si, desde lo quite de la parte de NOSOTROS... de verdad quiero estar siempre contigo, quiero seguir mejorando como persona y esforzarme para darte todo lo que quieras, la canción de regreso de Mario y Dafnne y la canción con la que te recuerdo a diario"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/La Amaré [GXL9UrZTdAg].mp3"></audio>
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
+                <audio class="w-full" controls src="../Musica/La Amaré - Prince Royce.mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Desde que salio la canción te la dedique en secreto, queria decicartelo antes pero no me hablabas, y aunque me duela no saber de ti, espero que estes bien y que cuando puedas me vuelvas a hablar y explicarme que esta pasando que de verdad no saber nada de ti me afecta mucho, quisiera al menos un mensaje que me diga que estas bien o que paso algo pero por mas que reviso los mensajes no encuentro ninguno, pero quiero que sepas que de verdad eres el amor de mi vida y la amoooo muchooooooo y pienso hacerlo por siempreeeeeee, quiero estar contigo por siempre, pero hagame caso que ya puedo estar sin saber de usted"</p>
-            </div>
-
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
-                <audio class="w-full" controls src="../Musica/Acuérdate de mí - Morat  Letra.MP3"></audio>
-            </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Es la canción que escuchaba cuando me volviste a hablar después de mi cumpleaños, todo lo que queria es volver a estar junto a ti, que te acuerdes de mi, que yo siempre te paraba recordando, como duele esa canción de nuevo ahora que te tengo tan lejos, quiero hablarte pero duele saber que no me creas.Y si yo puedo tener toda la culpa, pero no la culpa de haberte fallado o engañarte.Tu eres mi maldita debilidad y dueles, dueles mucho que no se que hacer, porque por mas que me enfoque en otras cosas, no pasa ni un segundo y ya pienso en ti, todas las noches sueño contigo y quisiera decir que es mentira pero no lo és. No lo entiendo, cuando te soñe a diario, pero te extraño mucho pero mas duele saber que no me creas, y si algun momento te acuerdas de mi, quiero decirte que fuiste y eres mi unico amor, la unica persona que me tiene así, la unica persona que he amado, y la unica persona con la que quiero estar"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Quiero que sepas que de verdad eres el amor de mi vida y la amoooo muchooooooo y pienso hacerlo por siempreeeeeee, quiero estar contigo por siempre, pero hagame caso que ya puedo estar sin saber de usted"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 flex justify-center items-center hover:scale-[1.02] transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] p-6 flex justify-center items-center transition-all duration-300">
                 <audio class="w-full" controls src="../Musica/Prince Royce - Mi Habitación (Audio) [YEQd_hMkCro].mp3"></audio>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Sabes lo feo que es escuchar canciones triste cuando estas pasando lo mismo, y aunque la letra no tenga nada que ver con nosotros, recordare todas las noches que llegaba y lloraba por ti, no puedo entender cuando me enamore de ti, pero solo tu eres capaz de provocar eso. Espero que te encuentres bien, le pido a Dios que te cuide mucho y quizas ya deba de empezar a olvidarte, pero creeme que no se como hacerlo, sigo pensando y creyendo que eres el amor de mi vida a pesar de que talvez no vuelva a hablar contigo ni verte, ahora esta pagina se convitio en mi diario, tu no lo veras porque lo pondre como privado, pero te amooooooooooooo y muchas veces siento que ya no puedo seguir si tu no estas a mi lado"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Sabes lo feo que es escuchar canciones triste cuando estas pasando lo mismo... sigo pensando y creyendo que eres el amor de mi vida a pesar de que talvez no vuelva a hablar contigo ni verte, ahora esta pagina se convitio en mi diario... te amooooooooooooo y muchas veces siento que ya no puedo seguir si tu no estas a mi lado"</p>
             </div>
         </div>  
     </main>
+
+    <footer class="text-center py-10 mt-10 border-t border-brand-pink/30 bg-gray-900/60 backdrop-blur-md relative z-10 shadow-[0_-4px_15px_rgba(0,0,0,0.5)]">
+        <p class="font-playfair font-medium text-brand-pink text-lg mb-1">Hecho con todo el amor del mundo para ti</p>
+        <p class="text-gray-400 font-light text-sm tracking-widest uppercase">Mi vida entera.</p>
+    </footer>
+
+    <script>
+        const container = document.getElementById('hearts-container');
+        const heartSymbols = ['💖', '💕', '💗', '💓', '🌸', '✨'];
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 5 + 6 + 's';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 12000); 
+        }
+
+        setInterval(createHeart, 600);
+        for(let i = 0; i < 8; i++) {
+            setTimeout(createHeart, i * 150);
+        }
+
+        // --- Interactividad Musical Premium ---
+        const audios = document.querySelectorAll('audio');
+        const emojisMusica = ['🎵', '🎶', '📻', '🎧', '🎸', '🎹', '💕'];
+        
+        // Indicador Global
+        const globalIndicator = document.createElement('div');
+        globalIndicator.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900/90 backdrop-blur-md border border-brand-pink/50 px-6 py-3 rounded-full shadow-[0_0_20px_rgba(236,72,153,0.4)] z-50 flex items-center gap-3 transition-all duration-500 transform translate-y-24 opacity-0 pointer-events-none';
+        globalIndicator.innerHTML = `
+            <div class="flex space-x-1 absolute -top-1 left-1/2 -translate-x-1/2">
+                <span class="w-1.5 h-3 bg-brand-pink rounded-full animate-[pulse_1s_ease-in-out_infinite]"></span>
+                <span class="w-1.5 h-4 bg-brand-rose rounded-full animate-[pulse_1.2s_ease-in-out_infinite_0.2s]"></span>
+                <span class="w-1.5 h-3 bg-brand-pink rounded-full animate-[pulse_0.8s_ease-in-out_infinite_0.4s]"></span>
+            </div>
+            <svg class="w-5 h-5 text-brand-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+            <span id="global-song-title" class="font-bold text-gray-200 text-sm max-w-[200px] sm:max-w-[300px] truncate">Escuchando...</span>
+        `;
+        document.body.appendChild(globalIndicator);
+
+        audios.forEach(audio => {
+            // Setup dinámico de Cover y Título
+            const filenameRaw = audio.src.split('/').pop();
+            const filename = decodeURIComponent(filenameRaw.replace(/\.[^/.]+$/, ""));
+            
+            // Limpieza de nombre
+            let cleanName = filename.replace(/\[.*?\]|\(.*?\)/g, '')
+                                  .replace(/_Letra|Letra|Audio|Sub Español|Traducida|Official Video|MP3_160K|MP3|hertz|Remix|feat\..*|ft\..*|y Pol Granch/gi, '')
+                                  .replace(/_/g, ' ')
+                                  .replace(/–|- /g, '-')
+                                  .trim();
+            let artist = 'Artista';
+            let title = cleanName;
+            
+            if (filenameRaw.toLowerCase().includes('madonna')) {
+                artist = 'Artista';
+                title = 'Madonna';
+            } else if (cleanName.includes('-')) {
+                const parts = cleanName.split('-');
+                
+                // Excepciones donde sabemos que el usuario puso primero la canción
+                const songArtistPattern = ["acuérdate de mí", "eres tú", "la soledad", "la amaré", "los lugares donde irás", "tiroteo"];
+                
+                let isSongFirst = false;
+                for(let pattern of songArtistPattern) {
+                    if (parts[0].toLowerCase().includes(pattern)) {
+                        isSongFirst = true;
+                        break;
+                    }
+                }
+                
+                if (isSongFirst) {
+                    title = parts[0].trim();
+                    artist = parts.slice(1).join('-').trim();
+                } else {
+                    artist = parts[0].trim();
+                    title = parts.slice(1).join('-').trim();
+                }
+            } else {
+                title = cleanName;
+            }
+
+            // Crear UI wrapper
+            const uiWrapper = document.createElement('div');
+            uiWrapper.className = "flex items-center gap-4 w-full mb-4";
+            
+            const imgDiv = document.createElement('div');
+            imgDiv.className = "w-14 h-14 rounded-md overflow-hidden bg-gray-800 border border-brand-pink/30 flex-shrink-0 shadow-[0_0_10px_rgba(236,72,153,0.2)]";
+            // Usa el nombre raw para la imagen o recae en default
+            imgDiv.innerHTML = `<img src="../imagenes/portadas/${filenameRaw}.jpg" onerror="this.src='../imagenes/LogoTienda.png'; this.classList.add('opacity-70', 'p-2')" class="w-full h-full object-cover">`;
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = "flex-1 overflow-hidden text-left";
+            textDiv.innerHTML = `<h3 class="font-bold text-gray-100 text-sm truncate" title="${title}">${title}</h3>
+                                 <p class="text-brand-pink text-xs truncate font-light">${artist}</p>`;
+                                 
+            uiWrapper.appendChild(imgDiv);
+            uiWrapper.appendChild(textDiv);
+            
+            const parent = audio.parentElement;
+            parent.classList.remove('justify-center');
+            parent.classList.add('flex-col', 'items-start', 'relative', 'overflow-hidden');
+            parent.insertBefore(uiWrapper, audio);
+
+            let noteInterval;
+
+            audio.addEventListener('play', () => {
+                // Global UI update
+                document.getElementById('global-song-title').innerText = title;
+                globalIndicator.classList.remove('translate-y-24', 'opacity-0');
+                
+                // Contenedor local luz
+                parent.classList.add('shadow-[0_0_40px_rgba(236,72,153,0.4)]', 'border-brand-pink');
+                
+                noteInterval = setInterval(() => {
+                    const note = document.createElement('div');
+                    note.innerText = emojisMusica[Math.floor(Math.random() * emojisMusica.length)];
+                    note.style.position = 'absolute';
+                    note.style.bottom = '20px';
+                    note.style.left = Math.random() * 80 + 10 + '%';
+                    note.style.fontSize = Math.random() * 10 + 15 + 'px'; // Tamaños variados
+                    note.style.animation = `floatNote ${Math.random() * 2 + 2}s ease-in forwards`;
+                    note.style.pointerEvents = 'none';
+                    note.style.zIndex = '20';
+                    note.style.textShadow = '0 0 10px rgba(236,72,153,0.8)';
+                    
+                    parent.appendChild(note);
+
+                    setTimeout(() => { note.remove(); }, 3500); 
+                }, 400); 
+                
+                // Auto pause others
+                audios.forEach(other => {
+                    if(other !== audio && !other.paused) {
+                        other.pause();
+                    }
+                });
+            });
+
+            const handleStop = () => {
+                clearInterval(noteInterval);
+                parent.classList.remove('shadow-[0_0_40px_rgba(236,72,153,0.4)]', 'border-brand-pink');
+                
+                // Hide global if no audio is playing
+                let isAnyPlaying = Array.from(audios).some(a => !a.paused);
+                if(!isAnyPlaying) {
+                    globalIndicator.classList.add('translate-y-24', 'opacity-0');
+                }
+            };
+
+            audio.addEventListener('pause', handleStop);
+            audio.addEventListener('ended', handleStop);
+        });
+    </script>
 </body>
 </html>

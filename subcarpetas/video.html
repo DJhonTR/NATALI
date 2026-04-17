@@ -4,183 +4,358 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../imagenes/LogoTienda.png" type="image/png">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Natali</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                        script: ['"Dancing Script"', 'cursive']
+                    },
+                    colors: {
+                        brand: {
+                            pink: '#ec4899',
+                            rose: '#f472b6',
+                            dark: '#be185d',
+                            cream: '#fce7f3'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'heartbeat': 'heartbeat 1.5s ease-in-out infinite',
+                        'fade-in': 'fadeIn 1.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        heartbeat: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '25%': { transform: 'scale(1.1)' },
+                            '50%': { transform: 'scale(1)' },
+                            '75%': { transform: 'scale(1.1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <title>Para el amor de mi vida - Videos</title>
+
+    <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        body { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; }
+        
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.1);
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .floating-heart {
+            position: absolute;
+            color: #ec4899;
+            opacity: 0;
+            animation: floatUp linear forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 0.5; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(45deg); opacity: 0; }
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white min-h-screen">
-    <header class="sticky top-0 z-50 shadow-lg shadow-pink-500/20">
-        <nav class="bg-gradient-to-r from-pink-500 via-pink-600 to-pink-500 backdrop-blur-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <a href="../index.html" class="transform transition-all duration-300 hover:scale-110 hover:rotate-12 group">
-                        <img src="../imagenes/NATALI_LOGO.png" alt="" width="85" height="45">
-                    </a>
-                    <ul class="flex gap-2 sm:gap-6 font-semibold">
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="musica.html">Musica</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="fotos.html">Fotos</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="nosotros.html">Nosotros</a></li>
-                        <li><a class="px-3 py-2 rounded-lg transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:-translate-y-0.5 text-sm sm:text-base" href="video.html">Video</a></li>
+
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-200 min-h-screen relative overflow-x-hidden selection:bg-brand-pink selection:text-white">
+
+    <div class="hearts-container" id="hearts-container"></div>
+    <div id="cinema-overlay" class="fixed inset-0 bg-black/95 backdrop-blur-sm z-[55] opacity-0 pointer-events-none transition-all duration-700"></div>
+
+    <header class="sticky top-0 z-50 transition-all duration-300 bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-brand-pink/30 shadow-brand-pink/10">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-3 sm:py-0 sm:h-20 gap-3 sm:gap-0">
+                <a href="../index.html" class="flex items-center group">
+                    <img src="../imagenes/NATALI_LOGO.png" alt="Logo" class="h-10 sm:h-12 w-auto transform transition-transform duration-500 group-hover:scale-105">
+                </a>
+                <nav class="w-full sm:w-auto overflow-x-auto no-scrollbar">
+                    <ul class="flex justify-center gap-4 sm:gap-8 font-playfair font-semibold text-gray-300 text-[14px] sm:text-lg tracking-wide px-2 py-1">
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="musica.html">Música</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="fotos.html">Fotos</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="nosotros.html">Nosotros</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-brand-rose" href="video.html">Videos</a></li>
                     </ul>
-                </div>
+                </nav>
             </div>
-        </nav>
+        </div>
     </header>
-    
-    <main class="container mx-auto px-4 py-8">
-        <div class="flex justify-center items-center gap-3 mb-6">
-            <h1 class="mt-3 font-black text-3xl md:text-5xl bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 bg-clip-text text-transparent">Videos</h1>
-            <svg class="text-pink-500 animate-pulse" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 14 14">
+
+    <main class="relative z-10 container mx-auto px-4 py-12">
+        <div class="flex justify-center items-center gap-4 mb-8 opacity-0 animate-fade-in">
+            <h1 class="font-playfair font-black text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark drop-shadow-[0_0_15px_rgba(236,72,153,0.3)]">Videos</h1>
+            <svg class="text-brand-pink animate-heartbeat" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 14 14">
                 <path fill="currentColor" fill-rule="evenodd" d="M5.351 1.07C5.768.653 6.348.469 7 .469s1.232.184 1.649.601c.416.417.601.997.601 1.649s-.185 1.231-.6 1.648c-.417.417-.997.602-1.649.602s-1.232-.185-1.649-.602c-.416-.416-.601-.996-.601-1.648s.185-1.232.601-1.649m1.65 5.988c-.507-.48-1.153-.983-1.846-1.246c-.39-.148-.806-.224-1.224-.169c-.421.056-.829.244-1.201.598c-.628.596-.786 1.345-.647 2.108c.137.752.562 1.522 1.104 2.216a9.7 9.7 0 0 0 1.888 1.82c.661.48 1.338.83 1.885.92a.3.3 0 0 0 .08 0c.547-.09 1.225-.44 1.885-.92a9.7 9.7 0 0 0 1.889-1.82c.542-.694.966-1.464 1.103-2.216c.14-.763-.018-1.512-.646-2.108c-.373-.354-.78-.542-1.202-.598c-.417-.055-.833.02-1.224.17c-.692.262-1.339.765-1.845 1.245" clip-rule="evenodd"/>
             </svg>
         </div>
         
-        <div class="bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-xl shadow-pink-500/10 border border-pink-500/20 p-6 max-w-4xl mx-auto mb-10">
-            <p class="text-gray-200 text-center text-lg md:text-xl">"Pondre algunas videos que me recuerdan a ti <3"</p>
+        <div class="glass-panel rounded-2xl p-6 text-center max-w-4xl mx-auto mb-16 opacity-0 animate-fade-in" style="animation-delay: 0.2s;">
+            <p class="text-gray-300 font-light text-xl md:text-2xl font-playfair italic">"Pondré algunos videos que me recuerdan a ti <span class="text-brand-pink">&lt;3</span>"</p>
         </div>
         
-        <div class="max-w-6xl mx-auto grid gap-8 grid-cols-1 lg:grid-cols-2 place-items-center">
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+        <div class="max-w-6xl mx-auto grid gap-10 grid-cols-1 lg:grid-cols-2 place-items-center opacity-0 animate-fade-in" style="animation-delay: 0.4s;">
+            <!-- Video 1 -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/new west - those eyes  sub. español.mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Estaba pensando si ponerlo o no, obvia esas partes que dicen de emborracharse o drogramos, porque sé que no lo harias y eso es algo que me gusta mucho de ti, que no eres como la mayoría de personas, eres diferente y eso te hace muy especial para mi y me recuerda porque me enamore de ti con cada tiii amuuu, los besos y los abrazos que aunque ahora ya no son muchos, cada uno es muy especial"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Estaba pensando si ponerlo o no, obvia esas partes que dicen de emborracharse o drogramos, porque sé que no lo harias y eso es algo que me gusta mucho de ti, que no eres como la mayoría de personas, eres diferente y eso te hace muy especial para mi y me recuerda porque me enamore de ti con cada tiii amuuu, los besos y los abrazos que aunque ahora ya no son muchos, cada uno es muy especial"</p>
             </div>
             
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <!-- Video 2 -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Quiero que seas mía esta noche ;; Los Barraza [Letra].mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Lo encontre cuando veía un capitulo de Al Fondo Hay Sitio el año pasado, en el tiempo que no podía verte cuando vivía con mi tía, cuando lo escuchava me ponía a pensar que estabamos en Quiruvilca en la noche, solo tu y yo, fantaseaba con volver a vivir un momento así con esa canción, solo tu y yo"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Lo encontre cuando veía un capitulo de Al Fondo Hay Sitio el año pasado, en el tiempo que no podía verte cuando vivía con mi tía, cuando lo escuchava me ponía a pensar que estabamos en Quiruvilca en la noche, solo tu y yo, fantaseaba con volver a vivir un momento así con esa canción, solo tu y yo"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+
+            <!-- Video 3 -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Avicii - All You Need Is Love (Traducida Al Español).mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"A partir de ahora, estas son las canciones que tenia anotado en un block de notas, nunca te los dedique, por diversas razones; pero creo que es un momento bonito para ir dedicando poco a poco las canciones que tenia anotado; empezemos por esta. Volvimos a hablar en un momento en donde pasaba por una etapa muy fea de ansiedad, paraba deprimido, no pense enamorarme, menos en ese año; pero llegaste tú y fue lo mejor que me pudo pasar, me di cuenta que Necesitaba de tu Amor..."</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"A partir de ahora, estas son las canciones que tenia anotado en un block de notas, nunca te los dedique, por diversas razones; pero creo que es un momento bonito para ir dedicando poco a poco las canciones que tenia anotado; empezemos por esta. Volvimos a hablar en un momento en donde pasaba por una etapa muy fea de ansiedad, paraba deprimido, no pense enamorarme, menos en ese año; pero llegaste tú y fue lo mejor que me pudo pasar, me di cuenta que Necesitaba de tu Amor..."</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+
+            <!-- Video 4 -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Avicii - Fade Into Darkness (Traducida al español).mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"No se si aún lo recuerdas, yo te pase ese video cuando empezamos a hablar, para mi era canción muy especial que le hiba a dedicar a alguien especial si la encontraba. Recuerdo que te dije que me la reenviaras para pasarsela a alguien pero nunca lo hize porque no tenía a alguien con la confianza y la amistad para dedicarselo, pero te la dedico a ti, y pensar que hace años ya te la habia mandado"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"No se si aún lo recuerdas, yo te pase ese video cuando empezamos a hablar, para mi era canción muy especial que le hiba a dedicar a alguien especial si la encontraba. Recuerdo que te dije que me la reenviaras para pasarsela a alguien pero nunca lo hize porque no tenía a alguien con la confianza y la amistad para dedicarselo, pero te la dedico a ti, y pensar que hace años ya te la habia mandado"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+
+            <!-- Video 5 -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Alesso - Heroes (We Could Be) ft. Tove Lo  Sub. Español.mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Te lo queria dedicar cuando recien estabamos pero nunca lo hice, pensaba que no era una canción tan romantica como para hacerlo, pero ahora veo que no lo fue, quiero que seamos solo tu y yo, logrando nuestras metas y sueños, quiero acompañarte en todos los logros que tengas como un día te lo dije, ser mejores cada día, ser diferentes a los demas que cambian de pareja a cada rato, ser solo Tu y Yo.. "</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Te lo queria dedicar cuando recien estabamos pero nunca lo hice, pensaba que no era una canción tan romantica como para hacerlo, pero ahora veo que no lo fue, quiero que seamos solo tu y yo, logrando nuestras metas y sueños, quiero acompañarte en todos los logros que tengas como un día te lo dije, ser mejores cada día, ser diferentes a los demas que cambian de pareja a cada rato, ser solo Tu y Yo.. "</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+
+            <!-- Video 6 -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Lost Frequencies & Tom Odell - Black Friday (pretty like the sun) (Sub Español) (Lyrics).mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Eres muy bonita y me gustas mucho...Obvia ciertas partes y quedate con lo quee te dije al Inicio"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Eres muy bonita y me gustas mucho...Obvia ciertas partes y quedate con lo quee te dije al Inicio"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+
+            <!-- Video 7 -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Martin Garrix ft. Bonn - High On Life (Traducida al Español)(720P_HD).mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Te lo dedique hace mucho tiempo, pero es tan especial y bonita que queria ponerlo aqui, sabes contigo me siento feliz, me gusto cuando dijiste que no me hablaste por que no estabas bien y si me hablabas me ibas a tratar mal; ahora ya no tengo miedo y quiero estar contigo por siempre hasta la muerte, quiero tenerte en mi vida por siempre"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Te lo dedique hace mucho tiempo, pero es tan especial y bonita que queria ponerlo aqui, sabes contigo me siento feliz, me gusto cuando dijiste que no me hablaste por que no estabas bien y si me hablabas me ibas a tratar mal; ahora ya no tengo miedo y quiero estar contigo por siempre hasta la muerte, quiero tenerte en mi vida por siempre"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/James Arthur - Car_s Outside (Sub. Español   Lyrics)(720P_HD).mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"No recuerdo exactamente como llegue a escuchar esta canción pero era lo que sentía cuando me terminamos el año pasado, tengo una historia que no te conte, pero que algun día lo hare y no me preguntes ahora porque prefiero decirtelo en persona. Pero ese momento que vivi me hizo darme cuenta que por mas que pase el tiempo, al contrario de olvidarme o dejar de pensar menos en ti, lo hacia aún más. No se que suceda mas adelante pero quiero vivirlo contigo, fuimos noveos desde muy pequeños y seguimos juntos y no quiero dejarte, simplemente no puedo, eres mi maldita debilidad y aunque muchas veces eso me hizo llorar, tambien fue muy feli y soy muy feliz a tu lado"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"No recuerdo exactamente como llegue a escuchar esta canción pero era lo que sentía cuando me terminamos el año pasado, tengo una historia que no te conte, pero que algun día lo hare y no me preguntes ahora porque prefiero decirtelo en persona. Pero ese momento que vivi me hizo darme cuenta que por mas que pase el tiempo, al contrario de olvidarme o dejar de pensar menos en ti, lo hacia aún más. No se que suceda mas adelante pero quiero vivirlo contigo, fuimos noveos desde muy pequeños y seguimos juntos y no quiero dejarte, simplemente no puedo, eres mi maldita debilidad y aunque muchas veces eso me hizo llorar, tambien fue muy feli y soy muy feliz a tu lado"</p>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Juliet to your Romeo ft. Em Beihold (Ingles _ Español)(720P_HD).mp4" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Recuerdo que te mande un tiktok con esta cancion, pero no te la dedique como tal, la escuchaba mucho cuando me empezaste a tratar mal, hubo un tiempo que si pensaba en simplemente olvidarte cuando estabamos juntos y segun yo lo estaba logrando, pero me mentia a mi mismo, nunca pude hacerlo, sigo sin enterder que realmente hiciste o como lograrte enamorarme así, a tal punto de construir una pagina solo para ti, pero soy feliz haciendolo"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Recuerdo que te mande un tiktok con esta cancion, pero no te la dedique como tal, la escuchaba mucho cuando me empezaste a tratar mal, hubo un tiempo que si pensaba en simplemente olvidarte cuando estabamos juntos y segun yo lo estaba logrando, pero me mentia a mi mismo, nunca pude hacerlo, sigo sin enterder que realmente hiciste o como lograrte enamorarme así, a tal punto de construir una pagina solo para ti, pero soy feliz haciendolo"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <!-- Rest of videos follow the same pattern -->
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Avicii - You Be Love (Traducida Al Español) [6-jpP0-Oyn0].mkv" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Te la dedique casi cuando iniciamos, no podia dejar que no este en la página, es una de las canciones mas especiales que te dedique, y mira pasaron tantas cosas pero puedo decir que sigo enamorado de mi misma persona de la que me enamore 4 años atras, nunca busque enamorarme menos a esa edad, pero lo lograrte de una forma que no entiendo como, pero yo soy muy feliz a tu lado, amo como eres y la maravillosa persona en la que te convertirte, tu cambio para bien conmigo; ya no peleamos ni nos hacemos sentir mal por nada y si pasa algo, tratamos de arreglarlo al instante, o simplemente viendonos, no podemos estar enojados cuando estamos juntos, esta cancion es para ti, 4 años despues y dejame decirte, que te amo muchisimo mas que antes"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Te la dedique casi cuando iniciamos, no podia dejar que no este en la página, es una de las canciones mas especiales que te dedique, y mira pasaron tantas cosas pero puedo decir que sigo enamorado de mi misma persona de la que me enamore 4 años atras, nunca busque enamorarme menos a esa edad, pero lo lograrte de una forma que no entiendo como, pero yo soy muy feliz a tu lado, amo como eres y la maravillosa persona en la que te convertirte, tu cambio para bien conmigo; ya no peleamos ni nos hacemos sentir mal por nada y si pasa algo, tratamos de arreglarlo al instante, o simplemente viendonos, no podemos estar enojados cuando estamos juntos, esta cancion es para ti, 4 años despues y dejame decirte, que te amo muchisimo mas que antes"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Alesso vs OneRepublic - If I Lose Myself (Sub. Español) [n4Vras2E39U].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Muchas veces me imaginaba una vida donde solo estemos tu y yo en un pueblo alejado con todo tipo de animales alejado de todo, amo la idea de saber que somos tu y yo, que no importa lo que pase, siempre estare a tu lado. Quiero casarme y vivir una vida junto a ti. Y si llego a perderme, quiero que sea contigo"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Muchas veces me imaginaba una vida donde solo estemos tu y yo en un pueblo alejado con todo tipo de animales alejado de todo, amo la idea de saber que somos tu y yo, que no importa lo que pase, siempre estare a tu lado. Quiero casarme y vivir una vida junto a ti. Y si llego a perderme, quiero que sea contigo"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/The Weeknd - Die For You (Sub. Español) [SvizVoNjv7A].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Tengo 3 canciones que me recordaban a ti el año pasado, dos ya te las dedique, esta es una de las canciones, en ese tiempo paramos mal y vivia con el miedo constante de que me termines o que yo lo haga y luego me arrepienta toda la vida, sabia que eso no era sano para nosotros y muchas veces busque formas o recuerdos que me permitan olvidarme de ti, pero no puedooooo, muchas veces me odie por no poder odiarte y decidir olvidarte, pero no puedo olvidarte, no despues de todo, tienes todo mi corazon y estoy bien pinche enamorado como no tienes ni la mas minima idea, ahora todo es diferente y aunque la cancion hable sobre otra cosa, si llegamos a terminar no me lo voy a perdonar nunca, eres mi vida, mi cielo, tu eres el amor de mi vida y soy capaz de dar todo lo mejor de mi por ti, cambie por ti, y creo que ese es el acto de amor mas valioso, no cualquiera lo hace, pero por ti lo hice, porque lo vales y mereces estar con alguien que te cuide y te respete, y yo quiero ser esa persona"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Tengo 3 canciones que me recordaban a ti el año pasado, dos ya te las dedique, esta es una de las canciones, en ese tiempo paramos mal y vivia con el miedo constante de que me termines o que yo lo haga y luego me arrepienta toda la vida, sabia que eso no era sano para nosotros y muchas veces busque formas o recuerdos que me permitan olvidarme de ti, pero no puedooooo, muchas veces me odie por no poder odiarte y decidir olvidarte, pero no puedo olvidarte, no despues de todo, tienes todo mi corazon y estoy bien pinche enamorado como no tienes ni la mas minima idea, ahora todo es diferente y aunque la cancion hable sobre otra cosa, si llegamos a terminar no me lo voy a perdonar nunca, eres mi vida, mi cielo, tu eres el amor de mi vida y soy capaz de dar todo lo mejor de mi por ti, cambie por ti, y creo que ese es el acto de amor mas valioso, no cualquiera lo hace, pero por ti lo hice, porque lo vales y mereces estar con alguien que te cuide y te respete, y yo quiero ser esa persona"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Firestone - Kygo ft. Conrad⧸⧸ español [3Kw3N2zQH7A].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Recordaras esta canción, me recuerda a esas noches que sali a escondidas para verte, ir por los cerros y llenarnos de besos, eramos tan solo unos niños pero quiero recordar eso por siempre, a esos dos niños que se veian a escodidas o que cuando salian no salian como una pareja normal, pero justo era eso lo que marco un bonita epoca que vivi contigo"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Recordaras esta canción, me recuerda a esas noches que sali a escondidas para verte, ir por los cerros y llenarnos de besos, eramos tan solo unos niños pero quiero recordar eso por siempre, a esos dos niños que se veian a escodidas o que cuando salian no salian como una pareja normal, pero justo era eso lo que marco un bonita epoca que vivi contigo"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/The Chainsmokers - Something Just Like This ft. Coldplay [traducida⧸sub español] [OpC26XCefgI].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Esto nunca te lo conte, pero es momento de hacerlo, una de las primeras veces que hablamos luego de la iglesia, hablamos con ti tío tambien, recuerdo que me dijo que tu hasta quemabas el agua, por alguna extraña razon esa noche estaba feliz por verte y hablar contigo, como te dije no tenia celular entonces tenia que prender la televisión, colocar mi usb y buscar canciones y ponerme a escuchar y esta fue la cancion que escuche, fui la primera vez que queria verte y hablar contigo, nunca supe lo que significaba la canción pero el simple hecho de recordar que fue la primera vez que me puse tan feliz despues de hablar contigo sin pensar en lo que pasaria despues"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Esto nunca te lo conte, pero es momento de hacerlo, una de las primeras veces que hablamos luego de la iglesia, hablamos con ti tío tambien, recuerdo que me dijo que tu hasta quemabas el agua, por alguna extraña razon esa noche estaba feliz por verte y hablar contigo, como te dije no tenia celular entonces tenia que prender la televisión, colocar mi usb y buscar canciones y ponerme a escuchar y esta fue la cancion que escuche, fui la primera vez que queria verte y hablar contigo, nunca supe lo que significaba la canción pero el simple hecho de recordar que fue la primera vez que me puse tan feliz despues de hablar contigo sin pensar en lo que pasaria despues"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/K-391, Alan Walker & Ahrix - End of Time (Subtitulada Español) [iSm9PQLZ0Lk].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Solo te dire algo y quiero que siempre lo recuerdes: "Estaremos por siempre y para siempre hasta el final de los tiempos" hasta que hagamos la respectiva moricion por deciamos de mas pequeños, y quiero cumplirlo, no me importa lo que pase, se que quiero hacerlo y estar junto a ti por siempre</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Solo te dire algo y quiero que siempre lo recuerdes: "Estaremos por siempre y para siempre hasta el final de los tiempos" hasta que hagamos la respectiva moricion por deciamos de mas pequeños, y quiero cumplirlo, no me importa lo que pase, se que quiero hacerlo y estar junto a ti por siempre</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/sombr - back to friends (Sub. Español + Lyrics) [Z8tI-Aqb9Ss].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Me aparecio en recomendados, y aunque recien veo su significado, sé que nunca podria ser tu amigo, no puedo ni imaginarme que eso suceda, se que igual no pasará, pero es un todo o nada, o estoy contigo o prefiero evitar todo contacto contigo y aunque me duela en el alma, estoy seguro de que preferiria eso antes que ser tu amigo y ver que alguien mas es dueño de tu corazon, eres mi primera vez en muchisimas cosas que no crei hacer, pero que las hice contigo y si las hice, es porque se que estaremos juntos por siempre, pero como me doleria esta canción si alguna vez terminamos"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Me aparecio en recomendados, y aunque recien veo su significado, sé que nunca podria ser tu amigo, no puedo ni imaginarme que eso suceda, se que igual no pasará, pero es un todo o nada, o estoy contigo o prefiero evitar todo contacto contigo y aunque me duela en el alma, estoy seguro de que preferiria eso antes que ser tu amigo y ver que alguien mas es dueño de tu corazon, eres mi primera vez en muchisimas cosas que no crei hacer, pero que las hice contigo y si las hice, es porque se que estaremos juntos por siempre, pero como me doleria esta canción si alguna vez terminamos"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Tiësto - Red Lights (Traducción al Español) [KmJjvt5uq18].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Muchas veces escuchaba esta canción y pensaba en ti, no por la letra en si, sino por el ambiente que generaba, me la pasaba pensando en las veces que peleabamos y tan solo bastaba un Sal, ya estoy por tu arriba de tu casa, para solucionar las cosas, algo que siente me gusto es saber que solo podiamos pelear por mensaje, porque nunca logramos pelearnos en persona, soñaba con casarme, viajar contigo, tener nuestra casa, y absolutamente toda la vida con esta canción, quiero que se cumpla y estoy esforzandome para que se cumpla mas adelante, toda mi imaginación en un futuro contigo fue con esta canción"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Muchas veces escuchaba esta canción y pensaba en ti, no por la letra en si, sino por el ambiente que generaba, me la pasaba pensando en las veces que peleabamos y tan solo bastaba un Sal, ya estoy por tu arriba de tu casa, para solucionar las cosas, algo que siente me gusto es saber que solo podiamos pelear por mensaje, porque nunca logramos pelearnos en persona, soñaba con casarme, viajar contigo, tener nuestra casa, y absolutamente toda la vida con esta canción, quiero que se cumpla y estoy esforzandome para que se cumpla mas adelante, toda mi imaginación en un futuro contigo fue con esta canción"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Martin Garrix  & David Guetta - So Far Away ft. Jamie Scott, Romy Dya (Traducida al Español) [TJ-u1rvQLYc].mkv" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"No se como empezar esto pero necesito desahogarme, no sabes cuando te extraño y cuanta falta me haces, estas tan lejos ahora que ya no se si quiero hablarte o mejor pienso cosas que me ayuden a olvidarte o que al menos me hagan quitarme la idea de escribirte de nuevo, lo unico que se este que te seguire amando un buen rato, quizas para siempre, y aunque me aterra esa idea, creo que esta vez tendre que vivir con eso"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"No se como empezar esto pero necesito desahogarme, no sabes cuando te extraño y cuanta falta me haces, estas tan lejos ahora que ya no se si quiero hablarte o mejor pienso cosas que me ayuden a olvidarte o que al menos me hagan quitarme la idea de escribirte de nuevo, lo unico que se este que te seguire amando un buen rato, quizas para siempre, y aunque me aterra esa idea, creo que esta vez tendre que vivir con eso"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/David Guetta - Without You (ft. Usher) ⧸⧸ Sub Español [uETBHgnbK30].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Ahora que no estas, ya no se que hacer, sé que tengo que seguir con mis estudios, ser un profesional, ser mejor persona cada día, pero me duele ahora saber que ya no estas aquí, gran parte de todo esto, por no decir todo fue por ti, creeme que otra seria mi vida si no te hubiera conocido, quiero continuar, pero es muy dificil, quiero entender que todo es parte de un proceso de olvidarte y que el tiempo cura todo, pero yo ya estuve muchos meses sin saber nada de ti, y en lugar de olvidarte no pase ni un día sin recordarte, solo espero que estes bien, y que si a futuro tienes a alguien más espero que nunca me llegue a enterar, porque me doleria mucho, aun asi te deseo todo lo mejor y que seas muy feliz, siempre te voy a desear lo mejor"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Ahora que no estas, ya no se que hacer, sé que tengo que seguir con mis estudios, ser un profesional, ser mejor persona cada día, pero me duele ahora saber que ya no estas aquí, gran parte de todo esto, por no decir todo fue por ti, creeme que otra seria mi vida si no te hubiera conocido, quiero continuar, pero es muy dificil, quiero entender que todo es parte de un proceso de olvidarte y que el tiempo cura todo, pero yo ya estuve muchos meses sin saber nada de ti, y en lugar de olvidarte no pase ni un día sin recordarte, solo espero que estes bien, y que si a futuro tienes a alguien más espero que nunca me llegue a enterar, porque me doleria mucho, aun asi te deseo todo lo mejor y que seas muy feliz, siempre te voy a desear lo mejor"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Armin Van Buuren Ft. Laura V - Drowining (Avicii Remix) (Traducida al Español) [v5FsfkTf688].mkv" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"No pense que diria esto, pero a pesar de los días siento que te amo más, es lo peor no crees, al inicio aunque me dolio recorde los días en que preocupaba por ti y parecia que no te importo en lo mas minimo como me sentia por la forma como me hablabas y ya ni siquiera me hablabas y senti algo de calma al recordar que ya tenia el porque preocuparme por ti, pero ahora no importa nada de eso, no ha pasado ni un día sin soñarte y eso feo porque todos mis sueños son bonitos y luego cuando levanto recuerdo que ya volvera a pasar"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"No pense que diria esto, pero a pesar de los días siento que te amo más, es lo peor no crees, al inicio aunque me dolio recorde los días en que preocupaba por ti y parecia que no te importo en lo mas minimo como me sentia por la forma como me hablabas y ya ni siquiera me hablabas y senti algo de calma al recordar que ya tenia el porque preocuparme por ti, pero ahora no importa nada de eso, no ha pasado ni un día sin soñarte y eso feo porque todos mis sueños son bonitos y luego cuando levanto recuerdo que ya volvera a pasar"</p>
             </div>
 
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/5 to-pink-600/5 rounded-2xl p-4 shadow-lg border border-pink-500/10 hover:shadow-pink-500/20 transition-all duration-300">
+            <div class="w-full max-w-xl bg-gray-800/40 rounded-2xl p-4 shadow-lg border border-brand-pink/20 hover:border-brand-pink/50 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)] transition-all duration-300">
                 <video class="rounded-xl w-full shadow-2xl" src="../Videos/Kygo & Sasha Sloan - I'll Wait ⧸⧸ Sub Español [ldVQEJoqqf8].webm" controls></video>
             </div>
-            <div class="w-full max-w-xl bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-2xl shadow-lg shadow-pink-500/10 border border-pink-500/20 p-6 hover:scale-[1.02] transition-all duration-300">
-                <p class="text-gray-200 text-justify leading-relaxed">"Muchas veces queria decir algun día cuando ya estemos grandes, que estuvimos juntos desde los 15 años, mientras que muchos piensan en tener varias chicas o que el amor a esa edad no funciona, de verdad queria que contigo sea la excepcion, quiero que almenos me dejes un segundo de doler o que mi mente no te piense o te sueñe, ojala regreses porque eres todo para mi, eres mi vida entera"</p>
+            <div class="w-full max-w-xl glass-panel rounded-2xl p-8 hover:scale-[1.02] transition-all duration-300">
+                <p class="text-gray-300 text-justify leading-relaxed">"Muchas veces queria decir algun día cuando ya estemos grandes, que estuvimos juntos desde los 15 años, mientras que muchos piensan en tener varias chicas o que el amor a esa edad no funciona, de verdad queria que contigo sea la excepcion, quiero que almenos me dejes un segundo de doler o que mi mente no te piense o te sueñe, ojala regreses porque eres todo para mi, eres mi vida entera"</p>
             </div>
-
 
         </div>
     </main>
+
+    <footer class="text-center py-10 border-t border-brand-pink/30 bg-gray-900/60 backdrop-blur-md relative z-10 shadow-[0_-4px_15px_rgba(0,0,0,0.5)]">
+        <p class="font-playfair font-medium text-brand-pink text-lg mb-1">Hecho con todo el amor del mundo para ti</p>
+        <p class="text-gray-400 font-light text-sm tracking-widest uppercase">Mi vida entera.</p>
+    </footer>
+
+    <script>
+        const container = document.getElementById('hearts-container');
+        const heartSymbols = ['💖', '💕', '💗', '💓', '🌸', '✨'];
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 5 + 6 + 's';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 12000); 
+        }
+
+        setInterval(createHeart, 600);
+        for(let i = 0; i < 8; i++) {
+            setTimeout(createHeart, i * 150);
+        }
+
+        // --- Modo Cine Premium para Videos ---
+        const overlay = document.getElementById('cinema-overlay');
+        const videos = document.querySelectorAll('video');
+        const mainEl = document.querySelector('main');
+
+        videos.forEach(video => {
+            const parent = video.parentElement;
+            
+            video.addEventListener('play', () => {
+                // Activar las luces apagadas
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                
+                // Elevar main y el video específico
+                mainEl.classList.remove('z-10');
+                mainEl.classList.add('z-[60]');
+                parent.classList.add('z-[70]', 'relative', 'scale-105', 'shadow-[0_0_40px_rgba(236,72,153,0.6)]', 'border-brand-pink');
+                
+                // Pausar los demás automáticamente
+                videos.forEach(otherVideo => {
+                    if(otherVideo !== video && !otherVideo.paused) {
+                        otherVideo.pause();
+                    }
+                });
+            });
+
+            video.addEventListener('pause', () => {
+                // Desactivar luces oscuras si no hay otro reproduciéndose
+                let isAnyPlaying = Array.from(videos).some(v => !v.paused);
+                if (!isAnyPlaying) {
+                    overlay.classList.add('opacity-0');
+                    overlay.classList.remove('opacity-100');
+                    mainEl.classList.remove('z-[60]');
+                    mainEl.classList.add('z-10');
+                }
+                
+                // Quitar el resalte
+                parent.classList.remove('z-[70]', 'relative', 'scale-105', 'shadow-[0_0_40px_rgba(236,72,153,0.6)]', 'border-brand-pink');
+            });
+
+            video.addEventListener('ended', () => {
+                let isAnyPlaying = Array.from(videos).some(v => !v.paused);
+                if (!isAnyPlaying) {
+                    overlay.classList.add('opacity-0');
+                    overlay.classList.remove('opacity-100');
+                    mainEl.classList.remove('z-[60]');
+                    mainEl.classList.add('z-10');
+                }
+                parent.classList.remove('z-[70]', 'relative', 'scale-105', 'shadow-[0_0_40px_rgba(236,72,153,0.6)]', 'border-brand-pink');
+            });
+        });
+    </script>
 </body>
 </html>
