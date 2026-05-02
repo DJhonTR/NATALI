@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,18 +48,40 @@
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap"
+        rel="stylesheet">
     <title>Para el amor de mi vida</title>
 
     <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        body { font-family: 'Montserrat', sans-serif; }
-        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; }
-        .font-script { font-family: 'Dancing Script', cursive; }
-        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-script {
+            font-family: 'Dancing Script', cursive;
+        }
+
         .glass-panel {
             background: rgba(17, 24, 39, 0.5);
             backdrop-filter: blur(12px);
@@ -70,23 +93,26 @@
         .polaroid {
             background: #1f2937;
             padding: 12px 12px 40px 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             transition: all 0.4s ease;
             position: relative;
             border: 1px solid rgba(236, 72, 153, 0.2);
         }
+
         .polaroid:hover {
             transform: scale(1.05) translateY(-5px);
             box-shadow: 0 15px 35px rgba(236, 72, 153, 0.3);
             border-color: rgba(236, 72, 153, 0.6);
             z-index: 10;
         }
+
         .polaroid img {
             width: 100%;
             height: 280px;
             object-fit: cover;
             border-radius: 4px;
         }
+
         .polaroid::after {
             content: "Nuestro momento";
             position: absolute;
@@ -98,33 +124,57 @@
             font-size: 1.4rem;
             color: #f472b6;
         }
+
         .polaroid.p-alt::after {
             content: "Para siempre";
         }
-        .polaroid:nth-child(even) { transform: rotate(3deg); }
-        .polaroid:nth-child(odd) { transform: rotate(-3deg); }
-        .polaroid:nth-child(even):hover, .polaroid:nth-child(odd):hover {
+
+        .polaroid:nth-child(even) {
+            transform: rotate(3deg);
+        }
+
+        .polaroid:nth-child(odd) {
+            transform: rotate(-3deg);
+        }
+
+        .polaroid:nth-child(even):hover,
+        .polaroid:nth-child(odd):hover {
             transform: scale(1.05) rotate(0deg);
         }
 
         /* Heart floating bg */
         .hearts-container {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
         }
+
         .floating-heart {
             position: absolute;
             color: #ec4899;
             opacity: 0;
             animation: floatUp linear forwards;
         }
+
         @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 0.5; }
-            50% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) scale(1.2) rotate(45deg); opacity: 0; }
+            0% {
+                transform: translateY(110vh) scale(0.5) rotate(0deg);
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(45deg);
+                opacity: 0;
+            }
         }
 
         /* Typewriter cursor styling */
@@ -133,26 +183,40 @@
             animation: blink 1s step-end infinite;
             color: #f472b6;
         }
-        @keyframes blink { 50% { opacity: 0; } }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-200 min-h-screen relative overflow-x-hidden selection:bg-brand-pink selection:text-white">
+<body
+    class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-200 min-h-screen relative overflow-x-hidden selection:bg-brand-pink selection:text-white">
 
     <div class="hearts-container" id="hearts-container"></div>
 
-    <header class="sticky top-0 z-50 transition-all duration-300 bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-brand-pink/30 shadow-brand-pink/10">
+    <header
+        class="sticky top-0 z-50 transition-all duration-300 bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-brand-pink/30 shadow-brand-pink/10">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row justify-between items-center py-3 sm:py-0 sm:h-20 gap-3 sm:gap-0">
                 <a href="../index.html" class="flex items-center group">
-                    <img src="../imagenes/NATALI_LOGO.png" alt="Logo" class="h-10 sm:h-12 w-auto transform transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                    <img src="../imagenes/NATALI_LOGO.png" alt="Logo"
+                        class="h-10 sm:h-12 w-auto transform transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy">
                 </a>
                 <nav class="w-full sm:w-auto overflow-x-auto no-scrollbar">
-                    <ul class="flex justify-center gap-4 sm:gap-8 font-playfair font-semibold text-gray-300 text-[14px] sm:text-lg tracking-wide px-2 py-1">
-                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="musica.html">Música</a></li>
-                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="fotos.html">Fotos</a></li>
-                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-brand-rose" href="nosotros.html">Nosotros</a></li>
-                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full" href="video.html">Videos</a></li>
+                    <ul
+                        class="flex justify-center gap-4 sm:gap-8 font-playfair font-semibold text-gray-300 text-[14px] sm:text-lg tracking-wide px-2 py-1">
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full"
+                                href="musica.html">Música</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full"
+                                href="fotos.html">Fotos</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-brand-rose"
+                                href="nosotros.html">Nosotros</a></li>
+                        <li><a class="relative py-1 sm:py-2 whitespace-nowrap transition-colors hover:text-brand-rose after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-rose after:transition-all after:duration-300 hover:after:w-full"
+                                href="video.html">Videos</a></li>
                     </ul>
                 </nav>
             </div>
@@ -160,60 +224,115 @@
     </header>
 
     <main class="relative z-10 max-w-5xl mx-auto px-4 py-12 sm:py-20 flex flex-col items-center gap-20">
-        
+
         <!-- Hero & Secret Letter Section -->
         <div class="w-full flex justify-center opacity-0 animate-fade-in" style="animation-delay: 0.2s;">
             <div class="glass-panel text-center p-10 sm:p-14 rounded-[2rem] max-w-3xl w-full relative group">
-                <div class="absolute -top-6 -left-6 text-brand-pink opacity-50 text-6xl rotate-[-15deg] transition-transform duration-700 group-hover:rotate-[-5deg] group-hover:scale-110">✨</div>
-                <div class="absolute -bottom-6 -right-6 text-brand-rose opacity-50 text-5xl rotate-[15deg] transition-transform duration-700 group-hover:rotate-[25deg] group-hover:scale-110 animate-float">💝</div>
-                
-                <h1 class="text-4xl sm:text-6xl font-playfair font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark drop-shadow-[0_0_15px_rgba(236,72,153,0.3)] mb-4 tracking-wide">Para Mi Amor</h1>
+                <div
+                    class="absolute -top-6 -left-6 text-brand-pink opacity-50 text-6xl rotate-[-15deg] transition-transform duration-700 group-hover:rotate-[-5deg] group-hover:scale-110">
+                    ✨</div>
+                <div
+                    class="absolute -bottom-6 -right-6 text-brand-rose opacity-50 text-5xl rotate-[15deg] transition-transform duration-700 group-hover:rotate-[25deg] group-hover:scale-110 animate-float">
+                    💝</div>
+
+                <h1
+                    class="text-4xl sm:text-6xl font-playfair font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark drop-shadow-[0_0_15px_rgba(236,72,153,0.3)] mb-4 tracking-wide">
+                    Para Mi Amor</h1>
                 <h2 class="text-3xl sm:text-4xl font-script text-gray-300 mb-8">Nuestra pequeña historia</h2>
-                
-                <p id="typed-text" class="text-lg sm:text-xl font-medium text-gray-200 min-h-[60px] leading-relaxed typing mx-auto max-w-2xl"></p>
-                
+
+                <p id="typed-text"
+                    class="text-lg sm:text-xl font-medium text-gray-200 min-h-[60px] leading-relaxed typing mx-auto max-w-2xl">
+                </p>
+
                 <!-- Expanded Letter Document -->
-                <div class="mt-4 overflow-hidden relative transition-all duration-1000 ease-in-out max-h-0 opacity-0 transform translate-y-4" id="carta-secreta">
-                    <div class="bg-gray-800/80 backdrop-blur-md p-8 sm:p-12 rounded-xl border border-brand-pink/50 shadow-[0_8px_30px_rgba(236,72,153,0.1)] text-left relative mt-6 before:content-[''] before:absolute before:inset-2 before:border before:border-brand-pink/20 before:rounded-lg">
-                        <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-brand-pink text-white p-2 rounded-full shadow-[0_0_15px_rgba(236,72,153,0.5)] animate-pulse">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <div class="mt-4 overflow-hidden relative transition-all duration-1000 ease-in-out max-h-0 opacity-0 transform translate-y-4"
+                    id="carta-secreta">
+                    <div
+                        class="bg-gray-800/80 backdrop-blur-md p-8 sm:p-12 rounded-xl border border-brand-pink/50 shadow-[0_8px_30px_rgba(236,72,153,0.1)] text-left relative mt-6 before:content-[''] before:absolute before:inset-2 before:border before:border-brand-pink/20 before:rounded-lg">
+                        <div
+                            class="absolute -top-5 left-1/2 -translate-x-1/2 bg-brand-pink text-white p-2 rounded-full shadow-[0_0_15px_rgba(236,72,153,0.5)] animate-pulse">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
                         </div>
                         <div class="font-script text-4xl text-brand-rose mb-6 text-center mt-4">Mi Niña Hermosa,</div>
-                        <p class="mb-5 leading-relaxed text-lg text-gray-300">Eres la persona que más amo en esta vida, la razón por la que sonrío sin darme cuenta, incluso en los días más grises. Desde que te conocí, mi mundo se llenó de luz, de vida y de colores que no sabía que existían.</p>
-                        <p class="leading-relaxed text-lg text-gray-300 mb-6">Gracias por cada momento, por tu paciencia, tu ternura, y por existir en mi mismo tiempo. Te prometo cuidarte, valorarte y amarte cada día un poquito más (si es que eso es posible). Eres y siempre serás mi más bonita coincidencia.</p>
-                        <div class="text-right font-script text-3xl text-brand-rose mt-4">Te amo con todo mi corazón. 💕</div>
+                        <p class="mb-5 leading-relaxed text-lg text-gray-300">Eres la persona que más amo en esta vida,
+                            la razón por la que sonrío sin darme cuenta, incluso en los días más grises. Desde que te
+                            conocí, mi mundo se llenó de luz, de vida y de colores que no sabía que existían.</p>
+                        <p class="leading-relaxed text-lg text-gray-300 mb-6">Gracias por cada momento, por tu
+                            paciencia, tu ternura, y por existir en mi mismo tiempo. Te prometo cuidarte, valorarte y
+                            amarte cada día un poquito más (si es que eso es posible). Eres y siempre serás mi más
+                            bonita coincidencia.</p>
+                        <div class="text-right font-script text-3xl text-brand-rose mt-4">Te amo con todo mi corazón. 💕
+                        </div>
                     </div>
                 </div>
 
-                <button id="btn-carta" onclick="abrirCarta()" class="mt-8 sm:mt-10 relative inline-flex items-center justify-center w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-4 font-montserrat font-semibold text-white transition-all duration-300 bg-brand-pink rounded-full shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:bg-brand-rose hover:shadow-[0_0_30px_rgba(244,114,182,0.6)] hover:-translate-y-1 overflow-hidden group">
-                    <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-[150%] group-hover:h-56 opacity-20"></span>
+                <button id="btn-carta" onclick="abrirCarta()"
+                    class="mt-8 sm:mt-10 relative inline-flex items-center justify-center w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-4 font-montserrat font-semibold text-white transition-all duration-300 bg-brand-pink rounded-full shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:bg-brand-rose hover:shadow-[0_0_30px_rgba(244,114,182,0.6)] hover:-translate-y-1 overflow-hidden group">
+                    <span
+                        class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-[150%] group-hover:h-56 opacity-20"></span>
                     <span class="relative flex items-center gap-3 text-base sm:text-lg tracking-wide">
                         Abrir Carta Secreta
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 animate-heartbeat" fill="currentColor" viewBox="0 0 24 24"><path d="M22 4.25a2.25 2.25 0 00-2.25-2.25H4.25A2.25 2.25 0 002 4.25v15.5A2.25 2.25 0 004.25 22h15.5A2.25 2.25 0 0022 19.75V4.25zm-2.25 0v2.79L12 13.91 4.25 7.04V4.25h15.5zM4.25 19.75v-9.98l7.15 6.32a.9.9 0 001.2 0l7.15-6.32v9.98H4.25z"/></svg>
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 animate-heartbeat" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M22 4.25a2.25 2.25 0 00-2.25-2.25H4.25A2.25 2.25 0 002 4.25v15.5A2.25 2.25 0 004.25 22h15.5A2.25 2.25 0 0022 19.75V4.25zm-2.25 0v2.79L12 13.91 4.25 7.04V4.25h15.5zM4.25 19.75v-9.98l7.15 6.32a.9.9 0 001.2 0l7.15-6.32v9.98H4.25z" />
+                        </svg>
                     </span>
                 </button>
             </div>
         </div>
 
+        <!-- Lyrics Section -->
+        <section class="w-full opacity-0 animate-fade-in" style="animation-delay: 0.4s;">
+            <div class="glass-panel text-center p-8 rounded-[2rem] max-w-2xl w-full mx-auto relative group">
+                <h3
+                    class="text-3xl font-playfair font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark mb-4">
+                    Canción Sorpresa</h3>
+                <p class="text-gray-300 text-sm mb-4 font-montserrat font-light">Tiiii amuuuuuu <3 </p>
+                        <audio id="love-song" class="w-full mb-6 max-w-md mx-auto h-10 outline-none" controls>
+                            <!-- REEMPLAZA EL SRC CON LA RUTA DE TU CANCION -->
+                            <source src="../Musica/Cantares.mp3" type="audio/mpeg">
+                            Tu navegador no soporta el elemento de audio.
+                        </audio>
+                        <div
+                            class="min-h-[80px] flex items-center justify-center p-2 rounded-lg bg-gray-900/30 border border-brand-pink/20">
+                            <p id="lyrics-display"
+                                class="text-2xl sm:text-3xl font-script text-brand-rose transition-opacity duration-500 text-center drop-shadow-[0_0_10px_rgba(236,72,153,0.4)]">
+                                Dale play a la canción...
+                            </p>
+                        </div>
+            </div>
+        </section>
+
         <!-- Polaroid Photos Section -->
         <section class="w-full opacity-0 animate-fade-in pb-16" style="animation-delay: 0.6s;">
             <div class="text-center mb-16 relative">
-                <h3 class="text-4xl font-playfair font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark inline-block relative px-6 z-10 bg-gray-900">Nuestros Recuerdos</h3>
+                <h3
+                    class="text-4xl font-playfair font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-brand-pink to-brand-dark inline-block relative px-6 z-10 bg-gray-900">
+                    Nuestros Recuerdos</h3>
                 <div class="absolute top-1/2 left-0 w-full h-px bg-brand-pink/30 -z-10"></div>
                 <div class="flex justify-center mt-4">
-                    <svg class="text-brand-pink w-8 h-8 animate-float" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <svg class="text-brand-pink w-8 h-8 animate-float" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
                 </div>
             </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-16 max-w-4xl mx-auto px-4 place-items-center">
+
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-16 max-w-4xl mx-auto px-4 place-items-center">
                 <div class="polaroid w-full max-w-sm group">
                     <div class="overflow-hidden mb-2 rounded-sm cursor-crosshair">
-                        <img src="../nosotros/N1.jpg" alt="Recuerdo de nosotros 1" class="transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                        <img src="../nosotros/N1.jpg" alt="Recuerdo de nosotros 1"
+                            class="transition-transform duration-700 group-hover:scale-110" loading="lazy">
                     </div>
                 </div>
                 <div class="polaroid p-alt w-full max-w-sm group">
                     <div class="overflow-hidden mb-2 rounded-sm cursor-crosshair">
-                        <img src="../nosotros/N2.jpg" alt="Recuerdo de nosotros 2" class="transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                        <img src="../nosotros/N2.jpg" alt="Recuerdo de nosotros 2"
+                            class="transition-transform duration-700 group-hover:scale-110" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -221,7 +340,8 @@
 
     </main>
 
-    <footer class="text-center py-10 mt-10 border-t border-brand-pink/30 bg-gray-900/60 backdrop-blur-md relative z-10 shadow-[0_-4px_15px_rgba(0,0,0,0.5)]">
+    <footer
+        class="text-center py-10 mt-10 border-t border-brand-pink/30 bg-gray-900/60 backdrop-blur-md relative z-10 shadow-[0_-4px_15px_rgba(0,0,0,0.5)]">
         <p class="font-playfair font-medium text-brand-pink text-lg mb-1">Hecho con todo el amor del mundo para ti</p>
         <p class="text-gray-400 font-light text-sm tracking-widest uppercase">Mi vida entera.</p>
     </footer>
@@ -248,10 +368,10 @@
         function abrirCarta() {
             const carta = document.getElementById('carta-secreta');
             const btn = document.getElementById('btn-carta');
-            
+
             carta.classList.remove('max-h-0', 'opacity-0', 'translate-y-4');
             carta.classList.add('max-h-[800px]', 'opacity-100', 'translate-y-0');
-            
+
             btn.style.transform = 'translateY(25px) scale(0.95)';
             btn.style.opacity = '0';
             btn.style.pointerEvents = 'none';
@@ -262,7 +382,7 @@
 
         const container = document.getElementById('hearts-container');
         const heartSymbols = ['💖', '💕', '💗', '💓', '🌸', '✨'];
-        
+
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('floating-heart');
@@ -271,13 +391,85 @@
             heart.style.animationDuration = Math.random() * 5 + 6 + 's';
             heart.style.fontSize = Math.random() * 15 + 15 + 'px';
             container.appendChild(heart);
-            setTimeout(() => heart.remove(), 12000); 
+            setTimeout(() => heart.remove(), 12000);
         }
 
         setInterval(createHeart, 600);
-        for(let i = 0; i < 8; i++) {
+        for (let i = 0; i < 8; i++) {
             setTimeout(createHeart, i * 150);
+        }
+
+        // Lyrics Sync Logic
+        const audio = document.getElementById('love-song');
+        const lyricsDisplay = document.getElementById('lyrics-display');
+
+        // Define tus letras aquí con el tiempo en segundos en que deben aparecer
+        // Ejemplo de canción en portugués. Solo tienes que añadir el segundo y la línea.
+        const lyrics = [
+            { time: 0, text: "........." },
+            { time: 18, text: "El invierno pasó y la lluvia cesó" },
+            { time: 24, text: "Escucho la voz de mi amado" },
+            { time: 32, text: "Como un perfume derramado es su nombre" },
+            { time: 40, text: "Cuán bello es su amor" },
+            { time: 44, text: "Mejor que el vino más puro que hay" },
+            { time: 49, text: "Bésame con cada beso tuyo" },
+            { time: 55, text: "Yo soy de mi amado" },
+            { time: 58, text: "Y mi amado es mío" },
+            { time: 60 + 2, text: "Por noches mi corazón te esperó" },
+            { time: 70, text: "Vuelve mi amor" },
+            { time: 60 + 21, text: "¿Quién es esta que viene como el amanecer?" },
+            { time: 60 + 29, text: "Una de tus miradas me dominó" },
+            { time: 60 + 36, text: "Déjame ver tu lindo rostro" },
+            { time: 100, text: "Escuchar tu voz" },
+            { time: 104, text: "Cuán bello es su amor" },
+            { time: 60 + 48, text: "Mejor que el vino más puro que hay" },
+            { time: 60 + 53, text: "Bésame con cada beso tuyo" },
+            { time: 60 + 59, text: "Tu eres mi amada" },
+            { time: 60 + 62, text: "Y mi amor es tuyo" },
+            { time: 120 + 6, text: "Por noches mi corazón te esperó" },
+            { time: 120 + 14, text: "Vuelve mi amor" },
+            { time: 120 + 25, text: "Ponme como un sello en tu corazón" },
+            { time: 120 + 30, text: "Para que no haya más distancia entre nosotros" },
+            { time: 120 + 39, text: "Y las muchas aguas no pueden ahogar el amor" },
+            { time: 120 + 50, text: "Tu eres mi amada" },
+            { time: 120 + 54, text: "Y mi amado es mío" },
+            { time: 120 + 58, text: "Por noches mi corazón te esperó" },
+            { time: 180 + 5, text: "Regresa mi amor" },
+            { time: 180 + 23, text: "Yo soy de mi amado" },
+            { time: 180 + 25, text: "Y mi amada es mía" },
+            { time: 180 + 30, text: "Por noches mi corazón te esperó" },
+            { time: 180 + 37, text: "Vuelve mi amor" },
+            { time: 180 + 42, text: "Regresa amor mío" },
+            { time: 180 + 46, text: "A quien mi alma amó" },
+            { time: 180 + 54, text: "Vuelve mi amor" }
+
+        ];
+
+        if (audio && lyricsDisplay) {
+            audio.addEventListener('timeupdate', () => {
+                const currentTime = audio.currentTime;
+
+                // Encontrar la letra correspondiente al tiempo actual
+                let currentLyric = lyrics[0].text;
+                for (let i = 0; i < lyrics.length; i++) {
+                    if (currentTime >= lyrics[i].time) {
+                        currentLyric = lyrics[i].text;
+                    } else {
+                        break;
+                    }
+                }
+
+                // Si la letra cambia, hacemos un efecto de fade
+                if (lyricsDisplay.innerText !== currentLyric) {
+                    lyricsDisplay.style.opacity = '0';
+                    setTimeout(() => {
+                        lyricsDisplay.innerText = currentLyric;
+                        lyricsDisplay.style.opacity = '1';
+                    }, 500); // Mitad del tiempo de la transición css
+                }
+            });
         }
     </script>
 </body>
+
 </html>
